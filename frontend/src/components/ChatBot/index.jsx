@@ -1,7 +1,8 @@
-import React, {useState} from "react"
-import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css'
-import {MainContainer, ChatContainer, MessageList, Message, MessageInput} from "@chatscope/chat-ui-kit-react"
-import { API_KEY } from "../../keys"
+import React, {useState} from "react";
+import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
+import {MainContainer, ChatContainer, MessageList, Message, MessageInput} from "@chatscope/chat-ui-kit-react";
+
+const API_KEY = "sk-proj-RKkonaPuRFADAZ6xciv4T3BlbkFJz77Y907nEuQ9DTE5lIhv"
 
 export default function ChatBot () {
     const systemMessage = {
@@ -22,14 +23,14 @@ export default function ChatBot () {
             message: message,
             sender: "user",
             direction: "outgoing"
-        }
-        const newMessages = [...messages, newMessage]
-        setMessages(newMessages)
-        await sendAPIRequest(newMessages)
+        };
+        const newMessages = [...messages, newMessage];
+        setMessages(newMessages);
+        await sendAPIRequest(newMessages);
     }
     async function sendAPIRequest(chatMessages){
         let apiMessages = chatMessages.map((msgObj) =>{
-            let role = msgObj.sender === "ChatGPT" ? "assistant" : "user"
+            let role = msgObj.sender === "ChatGPT" ? "assistant" : "user";
             return {
                 role: role,
                 content: msgObj.message
@@ -52,7 +53,7 @@ export default function ChatBot () {
               },
               body: JSON.stringify(apiRequestBody)
             }).then((data) => {
-              return data.json()
+              return data.json();
             }).then((data) => {
               setMessages(() => {
                 const newMessages = [...chatMessages, {
@@ -62,8 +63,8 @@ export default function ChatBot () {
                   }]
                 console.log(newMessages)
                 return newMessages
-              })
-            })
+              });
+            });
     
     }
     
