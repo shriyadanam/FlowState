@@ -154,9 +154,5 @@ def send_network_counts():
     return jsonify(filtered_data.groupby('attack').size().to_dict())
 
 
-@app.route('/ask-chatbot', methods=['GET'])
-def ask_chatbot():
-    
-
 if __name__ == '__main__':
     app.run(debug=True)
