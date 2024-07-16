@@ -2,7 +2,7 @@
 import React, { useMemo, useState } from 'react';
 
 // Ant Design imports
-import { Row, Col, notification } from 'antd';
+import { Row, Col, notification, message } from 'antd';
 
 // CSS import
 import './App.css'
@@ -18,11 +18,61 @@ import axios from 'axios';
 import { fontWeight } from '@mui/system';
 
 const Context = React.createContext({ name: 'Default' });
+const API_KEY = "sk-proj-sQ8LbtjQxoNzyjV0JoawT3BlbkFJpsyhlcj4HSDmvJMHq3sA"
+const systemMessage = {
+  "role": "system",
+  "content": "Explain like a tech support agent who is knowledgeable about computer networks"
+}
+
 // App component
 function App() {
-  const contextValue = useMemo(() => ({ notification: notification }), []);
+  const [messages, setMessages] = useState([{
+        message: "What can I help you with?",
+        sender: "ChatGPT",
+        direction: "incoming"
+  }])
+  const contextValue = useMemo(() => ({ notification }), []);
   const [api, contextholder] = notification.useNotification();
 
+  async function sendAPIRequest(chatMessages){
+    let apiMessages = chatMessages.map((msgObj) =>{
+        let role = msgObj.sender === "ChatGPT" ? "assistant" : "user";
+        return {
+            role: role,
+            content: msgObj.message
+        }
+    })
+    
+    const apiRequestBody = {
+        "model": "gpt-3.5-turbo",
+        "messages": [
+            systemMessage,
+            ...apiMessages
+        ]
+    }
+    await fetch("https://api.openai.com/v1/chat/completions", 
+        {
+          method: "POST",
+          headers: {
+            "Authorization": "Bearer " + API_KEY,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(apiRequestBody)
+        }).then((data) => {
+          return data.json();
+        }).then((data) => {
+          setMessages(() => {
+            const newMessages = [...chatMessages, {
+                message: data.choices[0].message.content,
+                sender: "ChatGPT",
+                direction: "incoming"
+              }]
+            console.log(newMessages)
+            return newMessages
+          });
+        });
+  } 
+  
   async function automatedReqest() {
     return axios.get("http://localhost:5000/automated-network-request");
   }
@@ -73,7 +123,11 @@ function App() {
           </Col>
           <Col>
             <div className="component-box">
-              <Form />
+              <Form 
+                messages={messages}
+                setMessages={setMessages} 
+                sendApiRequest={sendAPIRequest} 
+              />
             </div>
           </Col>
           <Col>
@@ -83,7 +137,11 @@ function App() {
           </Col>
           <Col>
             <div className="component-box">
-              <ChatBot />
+              <ChatBot 
+                messages={messages} 
+                setMessages={setMessages} 
+                sendAPIRequest={sendAPIRequest} 
+              />
             </div>
           </Col>
         </Row>
