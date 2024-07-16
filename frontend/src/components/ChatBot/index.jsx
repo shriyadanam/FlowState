@@ -1,8 +1,7 @@
 import React, {useState} from "react";
 import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
 import {MainContainer, ChatContainer, MessageList, Message, MessageInput} from "@chatscope/chat-ui-kit-react";
-
-const API_KEY = "sk-proj-RKkonaPuRFADAZ6xciv4T3BlbkFJz77Y907nEuQ9DTE5lIhv"
+import { API_KEY } from "../../keys.js"
 
 export default function ChatBot () {
     const systemMessage = {
