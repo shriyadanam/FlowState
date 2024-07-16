@@ -6,6 +6,9 @@ from flask_cors import CORS
 from sklearn.preprocessing import LabelEncoder
 import joblib
 
+import matplotlib
+matplotlib.use('Agg')  # Use a non-interactive backend
+
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
@@ -74,20 +77,16 @@ def form_submission():
 # Generating the Flow Packet Visualization Graph
 @app.route('/generate-graph')
 def generate_graph():
-    df = pd.read_csv('ip_data.csv', nrows=500)
-    df_sample = df.sample(n=500, random_state=1)
+    df = pd.read_csv('../backend/data/ip_data.csv', nrows=1000)
+    df_sample = df.sample(n=100, random_state=1)
 
     G = nx.DiGraph()
-
-    print("reached!!!!!!!")
 
     for _, row in df_sample.iterrows():
         source_ip = row['Source.IP']
         destination_ip = row['Destination.IP']
         connection_type = row.get('ProtocolName', 'tcp')
         G.add_edge(source_ip, destination_ip, connection_type=connection_type)
-
-    print("reached 2!!!!!!!")
 
     def get_edge_colors(G):
         edge_colors = []
@@ -110,24 +109,23 @@ def generate_graph():
             edge_labels[(u, v)] = connection_type
         return edge_labels
 
-    pos = nx.spring_layout(G, k=0.15, iterations=20)
-
-    print("reached 3!!!!!!!")
+    pos = nx.spring_layout(G, k=0.5, iterations=50)
 
     edge_colors = get_edge_colors(G)
-    print("reached 4!!!!!!!")
-    nx.draw_networkx_edges(G, pos, edgelist=G.edges(), edge_color=edge_colors, alpha=0.5) # FAILED HEREEEEE
-    print("reached 4.5!!!!!!!")
-    nx.draw_networkx_labels(G, pos, font_size=8, font_family='sans-serif', font_color='black')
-    print("reached 5!!!!!!!")
-    edge_labels = get_edge_labels(G)
-    nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_size=6, label_pos=0.5)
 
-    plt.title('IP Connections Network Graph', fontsize=15)
+    fig, ax = plt.subplots(facecolor='black')
+    ax.set_facecolor('black')
+
+    nx.draw_networkx_edges(G, pos, edgelist=G.edges(), edge_color=edge_colors, alpha=0.5)
+    nx.draw_networkx_labels(G, pos, font_size=8, font_family='sans-serif', font_color='white', ax=ax)
+    edge_labels = get_edge_labels(G)
+    nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_size=6, label_pos=0.5, font_color='white', ax=ax, bbox=dict(facecolor='black', edgecolor='none'))
+
+    plt.title('IP Connections Network Graph', fontsize=15, color='white')
     plt.axis('off')
 
     img = io.BytesIO()
-    plt.savefig(img, format='png')
+    plt.savefig(img, format='png', facecolor = fig.get_facecolor())
     img.seek(0)
     return send_file(img, mimetype='image/png')
 
@@ -136,3 +134,6 @@ def generate_graph():
 @app.route('/network-counts', methods=['GET'])
 def send_network_counts():
     return jsonify(network_df.groupby('attack').size().to_dict())
+
+if __name__ == '__main__':
+    app.run(debug=True)
