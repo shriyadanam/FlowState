@@ -1,9 +1,10 @@
 import React, {useState} from "react";
 import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
 import {MainContainer, ChatContainer, MessageList, Message, MessageInput} from "@chatscope/chat-ui-kit-react";
-import { API_KEY } from "../../keys.js"
+// import { API_KEY } from "../../keys.js"
+const API_KEY = "abacada"
 
-export default function ChatBot () {
+export function ChatBot () {
     const systemMessage = {
         "role": "system",
         "content": "Explain like a tech support agent whose knowledgeable about computer networks"
