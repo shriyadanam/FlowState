@@ -8,6 +8,7 @@ import joblib
 
 import matplotlib
 matplotlib.use('Agg')  # Use a non-interactive backend
+import requests
 
 
 app = Flask(__name__)
@@ -21,6 +22,7 @@ loaded_label_encoder = joblib.load(label_encoder_filename)
 
 
 ips_df = pd.read_csv('../backend/data/ip_data.csv')
+network_df = None
 network_df = pd.read_csv('../backend/data/network_dataset.csv')
 
 
@@ -134,6 +136,28 @@ def generate_graph():
 @app.route('/network-counts', methods=['GET'])
 def send_network_counts():
     return jsonify(network_df.groupby('attack').size().to_dict())
+
+@app.route('/automated-network-request', methods=['GET'])
+def automate_network_request():
+    sample_request = network_df[['duration', 'src_bytes', 'num_file_creations', 'num_shells', 'service', 'num_failed_logins']].sample(n=1)
+    sample_endpoints = ips_df[['Source.IP', 'Destination.IP']].sample(n=1)
+    sample_req = sample_request.to_dict(orient='records')[0]
+    sample_endp = sample_endpoints.to_dict(orient='records')[0]
+    body = {
+        'Duration': sample_req['duration'],
+        'SourceBytes': sample_req['src_bytes'],
+        'FileCreations': sample_req['num_file_creations'],
+        'Shells': sample_req['num_shells'],
+        'Service': sample_req['service'],
+        'FailedLogins': sample_req['num_failed_logins']
+    }
+
+    # Make the POST request
+    res = requests.post("http://localhost:5000/formsubmission", json=body)
+    data = res.json()
+    data['source'] = sample_endp['Source.IP']
+    data['destination'] = sample_endp['Destination.IP']
+    return jsonify(data)
 
 if __name__ == '__main__':
     app.run(debug=True)
