@@ -1,6 +1,6 @@
 export const styles = {
     container: {
-      maxWidth: '600px',
+      width: '450px',
       margin: 'auto',
       backgroundColor: '#2B2B2B',
       borderRadius: '8px',

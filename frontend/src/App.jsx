@@ -16,6 +16,7 @@ import NetworkPieChart from './components/NetworkPieChart';
 import ChatBot from './components/ChatBot';
 import axios from 'axios';
 import { fontWeight } from '@mui/system';
+import NavBar from './components/NavBar';
 
 const Context = React.createContext({ name: 'Default' });
 // App component
@@ -54,34 +55,42 @@ function App() {
   return (
     <div className="app-container">
       <Context.Provider value={contextValue}>
-        {contextholder}
-        <Row justify="space-between" gutter={24}>
-          <Col onClick={(e) => {
-            openNotification();
-          }}>
-            <div className="component-box">
-              <NetworkAvailibilityDonut />
+        <Row>
+        <div>
+              <NavBar />
             </div>
+          </Row>
+        <Row justify="space-between" gutter={24}>
+          <Col span={8}>
             <div className="component-box">
               <NetworkPieChart />
             </div>
           </Col>
-          <Col>
+          <Col span={8}>
+            <div className="component-box">
+              <NetworkAvailibilityDonut />
+            </div>
+          </Col>
+          <Col span={8}>
             <div className="component-box">
               <TopIPs />
             </div>
           </Col>
-          <Col>
-            <div className="component-box">
-              <Form />
-            </div>
-          </Col>
-          <Col>
+        </Row>
+        <Row justify="space-between" gutter={24}>
+          <Col span={24}>
             <div className="component-box">
               <Visualization />
             </div>
           </Col>
-          <Col>
+        </Row>
+        <Row justify="space-between" gutter={24}>
+          <Col span={11}>
+            <div className="component-box">
+              <Form />
+            </div>
+          </Col>
+          <Col span={12}>
             <div className="component-box">
               <ChatBot />
             </div>
@@ -89,7 +98,7 @@ function App() {
         </Row>
       </Context.Provider>
     </div>
-  )
+  );
 }
 
 export default App

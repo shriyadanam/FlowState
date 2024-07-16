@@ -69,7 +69,7 @@ export function ChatBot () {
     
     return (
         <div>
-            <div style={{ position:"relative", height: "700px", width: "550px"  }}>
+            <div style={{ position:"relative", height: "550px", width: "550px"  }}>
                 <MainContainer style={{margin: 0, padding:0, border: "none", borderRadius: '8px', color: '#2B2B2B'}}>
                 <ChatContainer>       
                     <MessageList 

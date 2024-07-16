@@ -1,7 +1,10 @@
+import { height } from "@mui/system";
+
 export const styles = {
     container: {
-      maxWidth: '800px',
-      minWidth: '400px',
+      maxWidth: '400px',
+      minWidth: '200px',
+      height: '355px',
       margin: 'auto',
       backgroundColor: '#2B2B2B',
       borderRadius: '8px',
@@ -15,7 +18,9 @@ export const styles = {
     header: {
       color: 'white',
       fontWeight: 'bold',
-      marginBottom: '10px',
+      fontSize: '20px',
+      marginBottom: '20px',
+      width: '140px'
     },
     listsContainer: {
       display: 'flex',

@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { PieChart } from '@mui/x-charts/PieChart';
+import { styles } from './styles.jsx';
+import { styles as commonStyles } from '../styles.jsx';
 
 function NetworkAvailibilityDonut() {
   const [networkCounts, setNetworkCounts] = useState(null)
@@ -38,7 +40,9 @@ function NetworkAvailibilityDonut() {
     return null
 
   return (
-    <>
+    
+    <div style={styles.container}>
+      <h2 > Normal vs Attack Distribution </h2>
       <input
         type="text"
         placeholder="Filter by IP"
@@ -46,11 +50,14 @@ function NetworkAvailibilityDonut() {
         InputProps={{ disableUnderline: true }}
         onChange={handleFilterChange}
       />
+      
       <button 
         onClick={applyIPFilter}
         style={{ background: '#854D99' }}
       >
         Apply Filter</button>
+      <h2></h2>
+      <h2></h2>
       <PieChart
         series={[
           {
@@ -69,14 +76,13 @@ function NetworkAvailibilityDonut() {
           legend: {
             labelStyle: {
               fill: 'white'
-            }
+            },
           }
         }}
-        width={400}
+        width={350}
         height={200}
-        
       />
-    </>
+    </div>
   )
 }
 
