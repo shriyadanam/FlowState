@@ -4,12 +4,17 @@ import matplotlib.pyplot as plt
 import time, pandas as pd, random
 import io
 from flask_cors import CORS
+import time, pandas as pd, random
+import io
+from flask_cors import CORS
+from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})  # Allow all origins, for development
 
 #network_df = pd.read_csv('../data/network_dataset.csv')
 ips_df = pd.read_csv('../backend/ip_data.csv')
+df = pd.read_csv('./network_dataset.csv')
 
 
 # @app.route('/', methods=['GET'])
@@ -100,7 +105,6 @@ def generate_graph():
     img.seek(0)
     return send_file(img, mimetype='image/png')
 
-
-# while(True):
-#     time.sleep(random.randint(1, 5))
-#     send_next_request()
+@app.route('/network-counts', methods=['GET'])
+def send_network_counts():
+    return jsonify(df.groupby('attack').size().to_dict())

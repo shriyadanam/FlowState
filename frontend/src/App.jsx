@@ -8,29 +8,8 @@ import './App.css'
 import NetworkAvailibilityDonut from './components/NetworkAvailabilityDonut'
 import TopIPs from './components/TopIPs'
 import Visualization from './components/Visualization/graph'
+import NetworkPieChart from './components/NetworkPieChart'
 
-const pieChartData = [
-  {
-    name: "new",
-    total: 40
-  },
-  {
-    name: "evaluating",
-    total: 25
-  },
-  {
-    name: "ongoing",
-    total: 22
-  },
-  {
-    name: "finished",
-    total: 22
-  },
-  {
-    name: "archived",
-    total: 10
-  }
-]
 
 function App() {
   return (
