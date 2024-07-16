@@ -3,6 +3,23 @@ import { PieChart } from '@mui/x-charts/PieChart';
 
 function NetworkAvailibilityDonut() {
   const [networkCounts, setNetworkCounts] = useState(null)
+  const [filterIP, setFilterIP] = useState('');
+
+  const handleFilterChange = (event) => {
+    setFilterIP(event.target.value);
+  };
+
+  const applyIPFilter = async () => {
+    console.log('Sent!');
+    const response = await fetch(`http://localhost:5000/network-counts?filter_ip=${filterIP}`);
+    const json = await response.json();
+    console.log(json);
+    console.log('Recieved');
+    setNetworkCounts({
+      normal: json.normal,
+      attacks: json.r2l + json.probe + json.dos + json.u2r
+    });
+  };
 
   const fetchNetworkCounts = async () => {
     const response = await fetch("http://localhost:5000/network-counts")
@@ -22,6 +39,18 @@ function NetworkAvailibilityDonut() {
 
   return (
     <>
+      <input
+        type="text"
+        placeholder="Filter by IP"
+        value={filterIP}
+        InputProps={{ disableUnderline: true }}
+        onChange={handleFilterChange}
+      />
+      <button 
+        onClick={applyIPFilter}
+        style={{ background: '#854D99' }}
+      >
+        Apply Filter</button>
       <PieChart
         series={[
           {
@@ -34,6 +63,7 @@ function NetworkAvailibilityDonut() {
             paddingAngle: 5,
             cornerRadius: 5,
           },
+          
         ]}
         slotProps={{
           legend: {

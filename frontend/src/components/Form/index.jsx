@@ -50,6 +50,21 @@ const MyForm = () => {
             .then(data => {
                 console.log('POST request successful:');
                 setPrediction(data.prediction);
+                if (prediction !== '' || prediction !== 'normal') {
+                    const message = `
+                      I have received a packet with the following values:
+                      Service: ${service},
+                      Duration: ${duration},
+                      SourceBytes: ${src_bytes},
+                      FileCreations: ${num_file_creations},
+                      Shells: ${num_shells},
+                      FailedLogins: ${num_failed_logins}.
+                      This has been detected as a ${prediction} attack.
+                      Which values contribute to this anomaly, and how do we protect against this attack?
+                    `;
+                    
+                }
+
             })
             .catch(error => {
                 console.error('POST request failed:', error);
@@ -62,6 +77,7 @@ const MyForm = () => {
         setNumShells('');
         setNumFailedLogins('');
         setDuration('');
+            
     };
 
     return (
