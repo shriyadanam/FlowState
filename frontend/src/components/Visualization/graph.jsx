@@ -22,7 +22,6 @@ const GraphDisplay = () => {
 
   return (
     <div>
-      <h1>IP Connections Network Graph</h1>
       {graphUrl && <img src={graphUrl} alt="Network Graph" />}
     </div>
   );
