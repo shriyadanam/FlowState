@@ -11,6 +11,7 @@ const MyForm = () => {
     const [num_shells, setNumShells] = useState('');
     const [num_failed_logins, setNumFailedLogins] = useState('');
     const [duration, setDuration] = useState('');
+    const [prediction, setPrediction] = useState('');
     // const [serror_rate, setSerrorRate] = useState('');
 
     // Function to handle form submission
@@ -25,13 +26,11 @@ const MyForm = () => {
             'FileCreations': num_file_creations,
             'Shells': num_shells,
             'FailedLogins': num_failed_logins,
-            'Shells': num_shells,
-            'FailedLogins': num_failed_logins,
             'Duration': duration
         }
         
         // const response = requests.post(url, data=data)
-
+        const value = "";
         const requestOptions = {
             method: 'POST',
             headers: {
@@ -40,16 +39,17 @@ const MyForm = () => {
             },
             body: JSON.stringify(data)  // Convert data to JSON string
         };
+        
         fetch(url, requestOptions)
             .then(response => {
                 // if (!response.ok) {
                 //     throw new Error(`HTTP error! Status: ${response.status}`);
                 // }
-                return response.json();  // Parse response body as JSON
+                return response.json();
             })
             .then(data => {
                 console.log('POST request successful:');
-                console.log(data);  // Display parsed JSON data
+                setPrediction(data.prediction);
             })
             .catch(error => {
                 console.error('POST request failed:', error);
@@ -69,7 +69,7 @@ const MyForm = () => {
             <h2 style={styles.header}>Find the Attack</h2>
             <form style={styles.form} onSubmit={handleSubmit}>
                 <label>
-                    Service:
+                    Service: 
                     <input
                         type="text"
                         value={service}
@@ -141,6 +141,12 @@ const MyForm = () => {
                     Submit
                     </button>
             </form>
+            {prediction && ( // Display prediction if it exists
+                <div>
+                    <h2 style={styles.header}>Attack:</h2>
+                    <p style={{ fontSize: '24px', color: '#f1aafd' }}>{prediction}</p>
+                </div>
+            )}
         </div>
     );
 };

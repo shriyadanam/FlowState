@@ -1,51 +1,77 @@
 from flask import Flask, request, jsonify, send_file
 import networkx as nx
 import matplotlib.pyplot as plt
-import time, pandas as pd, random
-import io
+import time, pandas as pd, random, io
 from flask_cors import CORS
-import time, pandas as pd, random
-import io
-from flask_cors import CORS
-from flask_cors import CORS
+from sklearn.preprocessing import LabelEncoder
+import joblib
+
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}})  # Allow all origins, for development
+CORS(app, resources={r"/*": {"origins": "*"}})
 
-#network_df = pd.read_csv('../data/network_dataset.csv')
-ips_df = pd.read_csv('../backend/ip_data.csv')
-df = pd.read_csv('./network_dataset.csv')
+model_filename = './model/random_forest_model.pkl'
+loaded_model = joblib.load(model_filename)
+
+label_encoder_filename = './model/label_encoder.pkl'
+loaded_label_encoder = joblib.load(label_encoder_filename)
 
 
-# @app.route('/', methods=['GET'])
-# def send_next_request():
-#     req = df.sample().to_dict(orient='records')[0]
-#     print(req)
+ips_df = pd.read_csv('../backend/data/ip_data.csv')
+network_df = pd.read_csv('../backend/data/network_dataset.csv')
 
+
+# Get the top IPs
 @app.route('/topips', methods=['GET'])
 def top_ips():
     # Extracting and counting source & destination IPs
     source_counts = ips_df['Source.IP'].value_counts().head(5).index.tolist()
     dest_counts = ips_df['Destination.IP'].value_counts().head(5).index.tolist()
 
-    
     # Creating JSON response
     json_response = {
         "Top_Source_IPs": source_counts,
         "Top_Destination_IPs": dest_counts
     }
-    print(json_response)
-
     return jsonify(json_response)
 
 
+# Submitting the Form with Traffic Values
 @app.route('/formsubmission', methods=['POST'])
 def form_submission():
     data = request.json
     print("Data: ", data)
-    return jsonify({'message': 'Data received successfully'}), 200
+    # return jsonify({'message': 'Data received successfully'}), 200
+
+    # Example: Extract relevant features from form submission
+    duration = data['Duration']
+    src_bytes = data['SourceBytes']
+    num_file_creations = data['FileCreations']
+    num_shells = data['Shells']
+    service = data['Service']
+    num_failed_logins = data['FailedLogins']
+
+    # Create a DataFrame from the extracted data
+    input_data = pd.DataFrame({
+        'duration': [duration],
+        'src_bytes': [src_bytes],
+        'num_file_creations': [num_file_creations],
+        'num_shells': [num_shells],
+        'service': [service],
+        'num_failed_logins': [num_failed_logins]
+    })
+
+    # Perform any necessary preprocessing (e.g., encoding categorical features)
+    input_data['service'] = loaded_label_encoder.transform(input_data['service'])
+
+    # Make predictions using the loaded model
+    prediction = loaded_model.predict(input_data)
+
+    # Return prediction as JSON response
+    return jsonify({'prediction': prediction[0]}), 200
 
 
+# Generating the Flow Packet Visualization Graph
 @app.route('/generate-graph')
 def generate_graph():
     df = pd.read_csv('ip_data.csv', nrows=500)
@@ -105,6 +131,8 @@ def generate_graph():
     img.seek(0)
     return send_file(img, mimetype='image/png')
 
+
+# Getting the attack counts
 @app.route('/network-counts', methods=['GET'])
 def send_network_counts():
-    return jsonify(df.groupby('attack').size().to_dict())
+    return jsonify(network_df.groupby('attack').size().to_dict())

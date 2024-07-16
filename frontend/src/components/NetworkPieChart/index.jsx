@@ -15,7 +15,7 @@ function NetworkPieChart() {
   }, [])
 
   if (!networkCounts)
-    return null
+    return null;
 
   return (
     <>
@@ -39,4 +39,4 @@ function NetworkPieChart() {
   )
 }
 
-export default NetworkPieChart
+export default NetworkPieChart;

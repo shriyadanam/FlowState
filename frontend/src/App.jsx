@@ -1,30 +1,50 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+// React and useState import
+import React, { useState } from 'react';
+
+// Ant Design imports
 import { Row, Col } from 'antd';
-import DeviceAvailability from './components/DeviceAvailability';
+
+// CSS import
+import './App.css';
+
+// Component imports
+import NetworkAvailibilityDonut from './components/NetworkAvailabilityDonut';
 import Form from './components/Form';
-import './App.css'
-import NetworkAvailibilityDonut from './components/NetworkAvailabilityDonut'
-import TopIPs from './components/TopIPs'
-import Visualization from './components/Visualization/graph'
-import NetworkPieChart from './components/NetworkPieChart'
+import TopIPs from './components/TopIPs';
+import Visualization from './components/Visualization/graph';
+import NetworkPieChart from './components/NetworkPieChart';
 
-
+// App component
 function App() {
   return (
-    <Row justify="space-between" gutter={4}>
-      <Col xs={24} md={12} lg={5}>
-        <TopIPs />
-      </Col>
-      <Col xs={24} md={12} lg={15}>
-        <Form />
-      </Col>
-      <Col xs={24} md={12} lg={15}>
-        <Visualization />
-      </Col>
-    </Row>
-  )
+    <div className="app-container">
+      <Row justify="space-between" gutter={24}>
+        <Col>
+          <div className="component-box">
+            <NetworkAvailibilityDonut />
+          </div>
+          <div className="component-box">
+            <NetworkPieChart />
+          </div>
+        </Col>
+        <Col>
+          <div className="component-box">
+            <TopIPs />
+          </div>
+        </Col>
+        <Col>
+          <div className="component-box">
+            <Form />
+          </div>
+        </Col>
+        <Col>
+          <div className="component-box">
+            <Visualization />
+          </div>
+        </Col>
+      </Row>
+    </div>
+  );
 }
 
-export default App
+export default App;
