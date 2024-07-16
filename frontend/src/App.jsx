@@ -18,7 +18,7 @@ import axios from 'axios';
 import { fontWeight } from '@mui/system';
 
 const Context = React.createContext({ name: 'Default' });
-const API_KEY = "sk-proj-sQ8LbtjQxoNzyjV0JoawT3BlbkFJpsyhlcj4HSDmvJMHq3sA"
+const API_KEY = "api-key"
 const systemMessage = {
   "role": "system",
   "content": "Explain like a tech support agent who is knowledgeable about computer networks"
