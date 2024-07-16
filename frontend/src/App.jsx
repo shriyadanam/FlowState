@@ -1,33 +1,12 @@
+import { useState } from 'react'
 import './App.css'
-import NetworkAvailibilityDonut from './components/NetworkAvailabilityDonut'
-
-const pieChartData = [
-  {
-    name: "new",
-    total: 40
-  },
-  {
-    name: "evaluating",
-    total: 25
-  },
-  {
-    name: "ongoing",
-    total: 22
-  },
-  {
-    name: "finished",
-    total: 22
-  },
-  {
-    name: "archived",
-    total: 10
-  }
-]
+import ChatBot from './components/ChatBot'
 
 function App() {
+  const [count, setCount] = useState(0)
   return (
     <>
-      <NetworkAvailibilityDonut pieChartData={pieChartData} />
+      <ChatBot/>
     </>
   )
 }
