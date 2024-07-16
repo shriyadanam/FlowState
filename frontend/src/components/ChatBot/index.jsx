@@ -1,22 +1,8 @@
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
 import {MainContainer, ChatContainer, MessageList, Message, MessageInput} from "@chatscope/chat-ui-kit-react";
-const API_KEY = "sk-proj-xlPDuOLmjHLxss6V4rxdT3BlbkFJIZyrR6NLJYZ3KAwhFMcL"
 
-export function ChatBot () {
-    const systemMessage = {
-        "role": "system",
-        "content": "Explain like a tech support agent who is knowledgeable about computer networks"
-    }
-
-    const [messages, setMessages] = useState([
-        {
-            message: "What can I help you with?",
-            sender: "ChatGPT",
-            direction: "incoming"
-        }
-    ])
-    
+export function ChatBot ({ messages, setMessages, sendAPIRequest }) {
     const handleSend = async (message) =>{
         const newMessage = {
             message: message,
@@ -26,45 +12,6 @@ export function ChatBot () {
         const newMessages = [...messages, newMessage];
         setMessages(newMessages);
         await sendAPIRequest(newMessages);
-    }
-    async function sendAPIRequest(chatMessages){
-        let apiMessages = chatMessages.map((msgObj) =>{
-            let role = msgObj.sender === "ChatGPT" ? "assistant" : "user";
-            return {
-                role: role,
-                content: msgObj.message
-            }
-        })
-        
-        const apiRequestBody = {
-            "model": "gpt-3.5-turbo",
-            "messages": [
-                systemMessage,
-                ...apiMessages
-            ]
-        }
-        await fetch("https://api.openai.com/v1/chat/completions", 
-            {
-              method: "POST",
-              headers: {
-                "Authorization": "Bearer " + API_KEY,
-                "Content-Type": "application/json"
-              },
-              body: JSON.stringify(apiRequestBody)
-            }).then((data) => {
-              return data.json();
-            }).then((data) => {
-              setMessages(() => {
-                const newMessages = [...chatMessages, {
-                    message: data.choices[0].message.content,
-                    sender: "ChatGPT",
-                    direction: "incoming"
-                  }]
-                console.log(newMessages)
-                return newMessages
-              });
-            });
-    
     }
     
     return (

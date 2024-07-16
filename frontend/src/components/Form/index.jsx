@@ -1,8 +1,8 @@
 import { styles } from './styles.jsx';
 import { styles as commonStyles } from '../styles.jsx';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 
-const MyForm = () => {
+const MyForm = ({ messages, setMessages, sendApiRequest }) => {
     // State variables to store form input values
     // 'duration', 'src_bytes', 'serror_rate', 'num_file_creations', 'num_shells', 'service', 'num_failed_logins':
     const [service, setService] = useState('');
@@ -19,6 +19,7 @@ const MyForm = () => {
         event.preventDefault(); // Prevent the default form submission behavior
         // Here you can handle the form submission logic, e.g., sending data to backend
         
+        console.log("form submitted")
         const url = 'http://localhost:5000/formsubmission'
         const data = {
             'Service': service,
@@ -48,21 +49,27 @@ const MyForm = () => {
                 return response.json();
             })
             .then(data => {
-                console.log('POST request successful:');
                 setPrediction(data.prediction);
-                if (prediction !== '' || prediction !== 'normal') {
-                    const message = `
-                      I have received a packet with the following values:
-                      Service: ${service},
-                      Duration: ${duration},
-                      SourceBytes: ${src_bytes},
-                      FileCreations: ${num_file_creations},
-                      Shells: ${num_shells},
-                      FailedLogins: ${num_failed_logins}.
-                      This has been detected as a ${prediction} attack.
-                      Which values contribute to this anomaly, and how do we protect against this attack?
-                    `;
-                    
+                if (data.prediction !== '' && data.prediction !== 'normal') {
+                  const message = `
+                    I have received a packet with the following values:
+                    Service: ${service},
+                    Duration: ${duration},
+                    SourceBytes: ${src_bytes},
+                    FileCreations: ${num_file_creations},
+                    Shells: ${num_shells},
+                    FailedLogins: ${num_failed_logins}.
+                    This has been detected as a ${data.prediction} attack.
+                    Which values contribute to this anomaly, and how do we protect against this attack?
+                  `;
+                  console.log(message)
+                  const newMessages = [...messages, { 
+                    message,
+                    sender: "user",
+                    direction: "outgoing"
+                  }]
+                  setMessages(newMessages)
+                  sendApiRequest(newMessages);
                 }
 
             })
