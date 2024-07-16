@@ -27,7 +27,7 @@ function NetworkAvailibilityDonut() {
           {
             data: [
               { id: 0, value: networkCounts.normal, color: "#059dd9", label: 'Normal' },
-              { id: 1, value: networkCounts.attacks, color: "#f45b5a", label: 'Attacks' },
+              { id: 1, value: networkCounts.attacks, color: "#89c440", label: 'Attacks' },
             ],
             innerRadius: 40,
             outerRadius: 100,
