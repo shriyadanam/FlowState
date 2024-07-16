@@ -1,18 +1,18 @@
 // React and useState import
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 
 // Ant Design imports
-import { Row, Col } from 'antd';
+import { Row, Col } from 'antd'
 
 // CSS import
-import './App.css';
+import './App.css'
 
 // Component imports
-import NetworkAvailibilityDonut from './components/NetworkAvailabilityDonut';
-import Form from './components/Form';
-import TopIPs from './components/TopIPs';
-import Visualization from './components/Visualization/graph';
-import NetworkPieChart from './components/NetworkPieChart';
+import NetworkAvailibilityDonut from './components/NetworkAvailabilityDonut'
+import Form from './components/Form'
+import TopIPs from './components/TopIPs'
+import Visualization from './components/Visualization/graph'
+import NetworkPieChart from './components/NetworkPieChart'
 
 // App component
 function App() {
@@ -44,7 +44,7 @@ function App() {
         </Col>
       </Row>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App

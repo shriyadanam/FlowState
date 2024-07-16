@@ -28,9 +28,16 @@ function NetworkPieChart() {
               { id: 2, value: networkCounts.r2l, color: "#f5bc16", label: 'R2L' },
               { id: 3, value: networkCounts.probe, color: "#f58518", label: 'Probing' },
               { id: 4, value: networkCounts.u2r, color: "#f45b5a", label: 'U2R' }
-            ],
+            ]
           },
         ]}
+        slotProps={{
+          legend: {
+            labelStyle: {
+              fill: 'white'
+            }
+          }
+        }}
         width={400}
         height={200}
         innerRadius={5}

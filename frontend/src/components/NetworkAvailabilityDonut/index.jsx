@@ -35,6 +35,13 @@ function NetworkAvailibilityDonut() {
             cornerRadius: 5,
           },
         ]}
+        slotProps={{
+          legend: {
+            labelStyle: {
+              fill: 'white'
+            }
+          }
+        }}
         width={400}
         height={200}
         
