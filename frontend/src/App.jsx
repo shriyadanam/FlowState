@@ -81,6 +81,11 @@ function App() {
               <Visualization />
             </div>
           </Col>
+          <Col>
+            <div className="component-box">
+              <ChatBot />
+            </div>
+          </Col>
         </Row>
       </Context.Provider>
     </div>
