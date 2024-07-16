@@ -1,16 +1,13 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState } from 'react';
 import { PieChart } from '@mui/x-charts/PieChart';
 
-function NetworkAvailibilityDonut() {
+function NetworkPieChart() {
   const [networkCounts, setNetworkCounts] = useState(null)
 
   const fetchNetworkCounts = async () => {
     const response = await fetch("http://localhost:5000/network-counts")
     const json = await response.json()
-    setNetworkCounts({
-      normal: json.normal,
-      attacks: json.r2l + json.probe + json.dos + json.u2r
-    })
+    setNetworkCounts(json)
   }
 
   useEffect(() => {
@@ -27,20 +24,19 @@ function NetworkAvailibilityDonut() {
           {
             data: [
               { id: 0, value: networkCounts.normal, color: "#059dd9", label: 'Normal' },
-              { id: 1, value: networkCounts.attacks, color: "#89c440", label: 'Attacks' },
+              { id: 1, value: networkCounts.dos, color: "#89c440", label: 'DOS' },
+              { id: 2, value: networkCounts.r2l, color: "#f5bc16", label: 'R2L' },
+              { id: 3, value: networkCounts.probe, color: "#f58518", label: 'Probing' },
+              { id: 4, value: networkCounts.u2r, color: "#f45b5a", label: 'U2R' }
             ],
-            innerRadius: 40,
-            outerRadius: 100,
-            paddingAngle: 5,
-            cornerRadius: 5,
           },
         ]}
         width={400}
         height={200}
-        
+        innerRadius={5}
       />
     </>
   )
 }
 
-export default NetworkAvailibilityDonut
+export default NetworkPieChart
