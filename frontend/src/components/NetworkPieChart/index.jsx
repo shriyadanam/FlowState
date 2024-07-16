@@ -3,6 +3,20 @@ import { PieChart } from '@mui/x-charts/PieChart';
 
 function NetworkPieChart() {
   const [networkCounts, setNetworkCounts] = useState(null)
+  const [filterIP, setFilterIP] = useState('');
+
+  const handleFilterChange = (event) => {
+    setFilterIP(event.target.value);
+  };
+
+  const applyIPFilter = async () => {
+    console.log('Sent!');
+    const response = await fetch(`http://localhost:5000/network-counts?filter_ip=${filterIP}`);
+    const json = await response.json();
+    console.log(json);
+    console.log('Recieved');
+    setNetworkCounts(json)
+  };
 
   const fetchNetworkCounts = async () => {
     const response = await fetch("http://localhost:5000/network-counts")
@@ -19,6 +33,18 @@ function NetworkPieChart() {
 
   return (
     <>
+      <input
+        type="text"
+        placeholder="Filter by IP"
+        value={filterIP}
+        InputProps={{ disableUnderline: true }}
+        onChange={handleFilterChange}
+      />
+      <button 
+        onClick={applyIPFilter}
+        style={{ background: '#854D99' }}
+      >
+        Apply Filter</button>
       <PieChart
         series={[
           {

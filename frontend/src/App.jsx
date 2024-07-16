@@ -13,6 +13,7 @@ import Form from './components/Form';
 import TopIPs from './components/TopIPs';
 import Visualization from './components/Visualization/graph';
 import NetworkPieChart from './components/NetworkPieChart';
+import ChatBot from './components/ChatBot';
 
 // App component
 function App() {
@@ -40,6 +41,13 @@ function App() {
         <Col>
           <div className="component-box">
             <Visualization />
+          </div>
+        </Col>
+      </Row>
+      <Row>
+      <Col>
+          <div className="component-box" >
+            <ChatBot />
           </div>
         </Col>
       </Row>

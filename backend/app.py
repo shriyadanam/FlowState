@@ -8,6 +8,7 @@ import joblib
 
 
 app = Flask(__name__)
+
 CORS(app, resources={r"/*": {"origins": "*"}})
 
 model_filename = './model/random_forest_model.pkl'
@@ -135,4 +136,27 @@ def generate_graph():
 # Getting the attack counts
 @app.route('/network-counts', methods=['GET'])
 def send_network_counts():
-    return jsonify(network_df.groupby('attack').size().to_dict())
+    filter_ip = request.args.get('filter_ip')
+    if filter_ip:
+        # filtered_data = network_df[network_df['ip'] == filter_ip]
+        # To Exemplify a DOS attack:
+        json = {
+            'dos': 780, 
+            'normal': 81, 
+            'probe': 11, 
+            'r2l': 6, 
+            'u2r': 2
+            }
+        return jsonify(json)
+    else:
+        filtered_data = network_df
+
+    return jsonify(filtered_data.groupby('attack').size().to_dict())
+
+
+@app.route('/ask-chatbot', methods=['GET'])
+def ask_chatbot():
+    
+
+if __name__ == '__main__':
+    app.run(debug=True)
